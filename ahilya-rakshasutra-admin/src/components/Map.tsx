@@ -32,8 +32,12 @@ export default function Map({ points }: { points: Pt[] }) {
     // If the container resizes (e.g., panel opens), fix tile alignment
     if (divRef.current) {
       const ro = new ResizeObserver(() => {
-        // small delay helps when parent grid changes
-        setTimeout(() => map.invalidateSize(), 0);
+        // SAFETY FIX: Added delay and check to prevent _leaflet_pos error
+        setTimeout(() => {
+          if (mapRef.current) {
+            mapRef.current.invalidateSize();
+          }
+        }, 150);
       });
       ro.observe(divRef.current);
       resizeObsRef.current = ro;
@@ -61,12 +65,14 @@ export default function Map({ points }: { points: Pt[] }) {
     layer.clearLayers();
 
     const bounds = L.latLngBounds([]);
+    let validPointsCount = 0;
 
     points.forEach(p => {
       const lat = Number(p.lat);
       const lon = Number(p.lon);
       if (!Number.isFinite(lat) || !Number.isFinite(lon)) return; // ignore junk
 
+      validPointsCount++;
       const color =
         p.type === "sms" ? "#e07b3a" : p.type === "url" ? "#6b46c1" : "#d32f2f";
 
@@ -83,14 +89,18 @@ export default function Map({ points }: { points: Pt[] }) {
     });
 
     // Fit to data when we have it; otherwise stick to default center/zoom
-    if (points.length > 0 && bounds.isValid()) {
+    if (validPointsCount > 0 && bounds.isValid()) {
       map.fitBounds(bounds, { padding: [20, 20], maxZoom: 14 });
     } else {
       map.setView([22.7196, 75.8577], 12);
     }
 
-    // Ensure the map tiles/layout catch up if this ran after a layout change
-    setTimeout(() => map.invalidateSize(), 0);
+    // SAFETY FIX: Added delay and check to prevent _leaflet_pos error
+    setTimeout(() => {
+      if (mapRef.current) {
+        mapRef.current.invalidateSize();
+      }
+    }, 150);
   }, [points]);
 
   // Make sure the container actually has height in the parent
