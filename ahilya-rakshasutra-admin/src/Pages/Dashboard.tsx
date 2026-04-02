@@ -155,10 +155,10 @@ export default function Dashboard() {
     });
   }, [rows, modelById]);
 
-  const summaryCounts = useMemo(
-    () => ({ sms: counts.sms, url: counts.url, voip: counts.voip }),
-    [counts]
-  );
+  // const summaryCounts = useMemo(
+  //   () => ({ sms: counts.sms, url: counts.url, voip: counts.voip }),
+  //   [counts]
+  // );
 
   // ---------- UI ----------
   return (
