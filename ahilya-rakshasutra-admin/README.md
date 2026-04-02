@@ -67,3 +67,10 @@ export default tseslint.config([
   },
 ])
 ```
+
+```bash
+cd ahilya-rakshasutra-admin
+# Install dependencies
+npm install
+# Run the development server
+npm run dev
