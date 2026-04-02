@@ -7,17 +7,11 @@ import 'package:http/http.dart' as http;
 const _OVERRIDE = String.fromEnvironment('API_BASE', defaultValue: '');
 
 String getApiBase() {
-<<<<<<< Updated upstream
   if (_OVERRIDE.isNotEmpty) return _OVERRIDE;
-  return "http://10.235.220.199:8000"; // <-- replace with your IP
-=======
-  // IF running on Web, use localhost
-  if (kIsWeb) {
-    return "http://127.0.0.1:8000";
-  }
-  // IF running on Android, use the network IP
-  return "http://10.228.41.67:8000";
->>>>>>> Stashed changes
+
+  // Your live Hugging Face backend URL!
+  // This works universally for Android, iOS, Web, and any network.
+  return "https://nisarg2027-ahilya-backend.hf.space";
 }
 
 class Api {
